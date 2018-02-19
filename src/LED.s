@@ -27,8 +27,8 @@ RCC_AHB1ENR		EQU	0x40023830	;Clock control for AHB1 peripherals (includes GPIO)
 
 ;GPIO-D control registers
 GPIOD_MODER		EQU	0x40020C00	;set GPIO pin mode as Input/Output/Analog
-GPIOD_TYPER		EQU	0x40020C04	;Set GPIO pin type as push-pull or open drain
-GPIOD_SPEEDR	EQU 0x40020C08	;Set GPIO pin switching speed
+GPIOD_OTYPER	EQU	0x40020C04	;Set GPIO pin type as push-pull or open drain
+GPIOD_OSPEEDR	EQU 0x40020C08	;Set GPIO pin switching speed
 GPIOD_PUPDR		EQU	0x40020C0C	;Set GPIO pin pull-up/pull-down
 GPIOD_ODR		EQU	0x40020C14	;GPIO pin output data
 
@@ -68,16 +68,15 @@ SystemInit FUNCTION
 	STR		R0, [R1]
 
 	; Set type as push-pull	(Default)
-	LDR		R1, =GPIOD_TYPER	;Type bit '0' configures pin for push-pull
+	LDR		R1, =GPIOD_OTYPER	;Type bit '0' configures pin for push-pull
 	LDR		R0, [R1]
 	AND.W 	R0, #0xFFFF0FFF	
 	STR		R0, [R1]
 	
 	; Set Speed slow
-	LDR		R1, =GPIOD_SPEEDR	;Two bits per pin so bits 24 to 31 control pins 12 to 15
+	LDR		R1, =GPIOD_OSPEEDR	;Two bits per pin so bits 24 to 31 control pins 12 to 15
 	LDR		R0, [R1]
 	AND.W 	R0, #0x00FFFFFF		;Speed bits set to '00' configures pin for slow speed
-	
 	STR		R0, [R1]	
 	
 	; Set pull-up
